@@ -81,8 +81,8 @@ main {
   &__item {
     flex-shrink: 0;
 
-    &:not(:first-child) {
-      padding-left: $inline-default-margin;
+    &:not(:last-child) {
+      padding-right: $inline-default-margin;
     }
 
     &--expand {
@@ -172,8 +172,8 @@ main {
   }
 
   @each $margin in $layout-spacing-options {
-    &--#{$margin} > &__item:not(:first-child) {
-      padding-left: $margin;
+    &--#{$margin} > &__item:not(:last-child) {
+      padding-right: $margin;
     }
   }
 }
@@ -270,6 +270,24 @@ main {
 
 .error {
   color: red;
+  font-size: 14px;
+  max-width: 150px;
+}
+
+input {
+  width: 150px;
+}
+
+main {
+  margin: auto;
+  max-width: 600px;
+  font-size: 24px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  padding: 32px 10px 32px 48px;
+}
+
+button {
+  font-size: 18px;
 }
 
 

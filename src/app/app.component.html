@@ -1,268 +1,113 @@
 <main>
-  <div class="layout-inline">
-    <div class="layout-inline__item">
-      <form [formGroup]="form">
-        <div class="layout-list">
-          <div class="layout-list__item">
-            <button (click)="clear()">Clear</button>
-          </div>
-
-          <div class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Word 1
-              </div>
-
-              <div class="layout-inline__item">
-                <div class="layout-list layout-list--0px">
-                  <div class="layout-list__item">
-                    <input
-                      [class.invalid]="form.controls['first'].hasError('length')"
-                      formControlName="first"
-                      type="text"
-                      placeholder="Type the first word"
-                    >
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['first'].hasError('length')"
-                    class="layout-list__item error"
-                  >
-                    Word length is not equal to others
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['first'].hasError('required') && form.controls['first'].touched"
-                    class="layout-list__item error"
-                  >
-                    Can't be blank
-                  </div>
-                </div>
-              </div>
+  <div class="layout-list layout-list--64px">
+    <div class="layout-list__item">
+      <div class="layout-inline">
+        <div class="layout-inline__item">
+          <div class="layout-inline">
+            <div class="layout-inline__item">
+              Words quantity
             </div>
-          </div>
 
-          <div class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Word 2
-              </div>
-
-              <div class="layout-inline__item">
-                <div class="layout-list layout-list--0px">
-                  <div class="layout-list__item">
-                    <input
-                      [class.invalid]="form.controls['second'].hasError('length')"
-                      formControlName="second"
-                      type="text"
-                      placeholder="Type the second word"
-                    >
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['second'].hasError('length')"
-                    class="layout-list__item error"
+            <div class="layout-inline__item">
+              <div class="layout-list layout-list--0px">
+                <div class="layout-list__item">
+                  <input
+                    [class.invalid]="wordsQuantity.invalid && wordsQuantity.touched"
+                    [formControl]="wordsQuantity"
+                    type="number"
+                    placeholder="Words quantity"
                   >
-                    Word length is not equal to others
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['second'].hasError('required') && form.controls['second'].touched"
-                    class="layout-list__item error"
-                  >
-                    Can't be blank
-                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Word 3
-              </div>
-
-              <div class="layout-inline__item">
-                <div class="layout-list layout-list--0px">
-                  <div class="layout-list__item">
-                    <input
-                      [class.invalid]="form.controls['third'].hasError('length')"
-                      formControlName="third"
-                      type="text"
-                      placeholder="Type the third word"
-                    >
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['third'].hasError('length')"
-                    class="layout-list__item error"
-                  >
-                    Word length is not equal to others
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['third'].hasError('required') && form.controls['third'].touched"
-                    class="layout-list__item error"
-                  >
-                    Can't be blank
-                  </div>
+                <div
+                  *ngIf="(wordsQuantity.hasError('min') || wordsQuantity.hasError('max')) && wordsQuantity.touched"
+                  class="layout-list__item error"
+                >
+                  Should be between 3 and 20
                 </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Word 4
-              </div>
-
-              <div class="layout-inline__item">
-                <div class="layout-list layout-list--0px">
-                  <div class="layout-list__item">
-                    <input
-                      [class.invalid]="form.controls['forth'].hasError('length')"
-                      formControlName="forth"
-                      type="text"
-                      placeholder="Type the forth word"
-                    >
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['forth'].hasError('length')"
-                    class="layout-list__item error"
-                  >
-                    Word length is not equal to others
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['forth'].hasError('required') && form.controls['forth'].touched"
-                    class="layout-list__item error"
-                  >
-                    Can't be blank
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Word 5
-              </div>
-
-              <div class="layout-inline__item">
-                <div class="layout-list layout-list--0px">
-                  <div class="layout-list__item">
-                    <input
-                      [class.invalid]="form.controls['fifth'].hasError('length')"
-                      formControlName="fifth"
-                      type="text"
-                      placeholder="Type the fifth word"
-                    >
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['fifth'].hasError('length')"
-                    class="layout-list__item error"
-                  >
-                    Word length is not equal to others
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['fifth'].hasError('required') && form.controls['fifth'].touched"
-                    class="layout-list__item error"
-                  >
-                    Can't be blank
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Word 6
-              </div>
-
-              <div class="layout-inline__item">
-                <div class="layout-list layout-list--0px">
-                  <div class="layout-list__item">
-                    <input
-                      [class.invalid]="form.controls['sixth'].hasError('length')"
-                      formControlName="sixth"
-                      type="text"
-                      placeholder="Type the sixth word"
-                    >
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['sixth'].hasError('length')"
-                    class="layout-list__item error"
-                  >
-                    Word length is not equal to others
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['sixth'].hasError('required') && form.controls['sixth'].touched"
-                    class="layout-list__item error"
-                  >
-                    Can't be blank
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Word 7
-              </div>
-
-              <div class="layout-inline__item">
-                <div class="layout-list layout-list--0px">
-                  <div class="layout-list__item">
-                    <input
-                      [class.invalid]="form.controls['seventh'].hasError('length')"
-                      formControlName="seventh"
-                      type="text"
-                      placeholder="Type the seventh word"
-                    >
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['seventh'].hasError('length')"
-                    class="layout-list__item error"
-                  >
-                    Word length is not equal to others
-                  </div>
-
-                  <div
-                    *ngIf="form.controls['seventh'].hasError('required') && form.controls['seventh'].touched"
-                    class="layout-list__item error"
-                  >
-                    Can't be blank
-                  </div>
+                <div
+                  *ngIf="wordsQuantity.hasError('required') && wordsQuantity.touched"
+                  class="layout-list__item error"
+                >
+                  Can't be blank
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </form>
-    </div>
 
-    <div class="layout-inline__item">
-      <div class="layout-list">
-        <div class="layout-list__item">
-          <button (click)="countMaxMatches()" [disabled]="form.invalid">
-            Count max matches
+        <div class="layout-inline__item">
+          <button
+            (click)="regenerateForm(wordsQuantity.value, form.value)"
+          >
+            Regenerate from
           </button>
         </div>
 
+        <div class="layout-inline__item">
+          <button (click)="clear()">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-list__item">
+      <div class="layout-list">
+        <div class="layout-list__item">
+          <div class="layout-inline layout-inline--wrap layout-inline--32px">
+            <div
+              *ngFor="let wordControl of form.controls; let i = index"
+              class="layout-inline__item"
+            >
+              <div class="layout-inline">
+                <div class="layout-inline__item">
+                  Word {{ i + 1 }}
+                </div>
+
+                <div class="layout-inline__item">
+                  <div class="layout-list layout-list--0px">
+                    <div class="layout-list__item">
+                      <input
+                        [class.invalid]="wordControl.invalid && wordControl.touched"
+                        [formControl]="wordControl | asFormControl"
+                        type="text"
+                        [placeholder]="'Type the ' + (i + 1) + ' word'"
+                      >
+                    </div>
+
+                    <div
+                      *ngIf="wordControl.hasError('length') && wordControl.touched"
+                      class="layout-list__item error"
+                    >
+                      Word length is not equal to others
+                    </div>
+
+                    <div
+                      *ngIf="wordControl.hasError('required') && wordControl.touched"
+                      class="layout-list__item error"
+                    >
+                      Can't be blank
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="layout-list__item">
+          <button
+            [disabled]="form.invalid"
+            (click)="countMaxMatches()"
+          >
+            Count max matches
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="initialGuesses.length" class="layout-list__item">
+      <div class="layout-list">
         <div class="layout-list__item">
           <div class="layout-list">
             <div *ngFor="let matchCount of initialMatchesMap | keyvalue" class="layout-list__item">
@@ -279,8 +124,8 @@
           </div>
         </div>
 
-        <div *ngIf="initialGuesses.length" class="layout-list__item">
-          <div class="layout-inline">
+        <div class="layout-list__item">
+          <div class="layout-inline layout-inline--wrap">
             <div class="layout-inline__item">
               Initial guesses are:
             </div>
@@ -296,19 +141,53 @@
             <div class="layout-inline__item">
               {{ maxMatches }}
             </div>
+
+            <div class="layout-inline__item">
+              (You can click on the suggestion to select it)
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div *ngIf="initialGuesses.length" class="layout-inline__item">
+    <div
+      *ngIf="initialGuesses.length"
+      class="layout-list__item"
+    >
       <div class="layout-list">
         <div class="layout-list__item">
-          <input [formControl]="firstAttemptWordControl" type="text" placeholder="Type the first attempt word">
+          First attempt result
+        </div>
+        <div class="layout-list__item">
+          <div class="layout-inline">
+            <div class="layout-inline__item">
+              Selected first attempt word
+            </div>
+
+            <div class="layout-inline__item">
+              <input
+                [formControl]="firstAttemptWordControl"
+                type="text"
+                placeholder="Type the first attempt word"
+              >
+            </div>
+          </div>
         </div>
 
         <div class="layout-list__item">
-          <input [formControl]="firstAttemptMatchesControl" type="number" placeholder="Type the number of matches">
+          <div class="layout-inline">
+            <div class="layout-inline__item">
+              First attempt matches quantity
+            </div>
+
+            <div class="layout-inline__item">
+              <input
+                [formControl]="firstAttemptMatchesControl"
+                type="number"
+                placeholder="Type the number of matches"
+              >
+            </div>
+          </div>
         </div>
 
         <ng-container *ngIf="firstAttemptWordControl.value && firstAttemptMatchesControl.value !== null">
@@ -337,11 +216,19 @@
          class="layout-inline__item">
       <div class="layout-list">
         <div class="layout-list__item">
-          <input [formControl]="secondAttemptWordControl" type="text" placeholder="Type the second attempt word">
+          <input
+            [formControl]="secondAttemptWordControl"
+            type="text"
+            placeholder="Type the second attempt word"
+          >
         </div>
 
         <div class="layout-list__item">
-          <input [formControl]="secondAttemptMatchesControl" type="number" placeholder="Type the number of matches">
+          <input
+            [formControl]="secondAttemptMatchesControl"
+            type="number"
+            placeholder="Type the number of matches"
+          >
         </div>
 
         <ng-container *ngIf="secondAttemptWordControl.value && secondAttemptMatchesControl.value !== null">
@@ -371,11 +258,19 @@
          class="layout-inline__item">
       <div class="layout-list">
         <div class="layout-list__item">
-          <input [formControl]="thirdAttemptWordControl" type="text" placeholder="Type the third attempt word">
+          <input
+            [formControl]="thirdAttemptWordControl"
+            type="text"
+            placeholder="Type the third attempt word"
+          >
         </div>
 
         <div class="layout-list__item">
-          <input [formControl]="thirdAttemptMatchesControl" type="number" placeholder="Type the number of matches">
+          <input
+            [formControl]="thirdAttemptMatchesControl"
+            type="number"
+            placeholder="Type the number of matches"
+          >
         </div>
 
         <ng-container *ngIf="thirdAttemptWordControl.value && thirdAttemptMatchesControl.value !== null">

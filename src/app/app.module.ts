@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { AsFormControlPipe } from './as-form-control.pipe';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { AppComponent } from './app.component';
     ReactiveFormsModule,
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    AsFormControlPipe
   ],
   bootstrap: [AppComponent],
 })

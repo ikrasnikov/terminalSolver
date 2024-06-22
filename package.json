@@ -5,8 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "build:gh-pages": "ng build -c=gh-pages"
   },
   "private": true,
   "dependencies": {

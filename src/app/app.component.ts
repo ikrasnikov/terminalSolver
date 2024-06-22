@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-  AbstractControl,
+  AbstractControl, AbstractControlOptions, FormArray,
   FormControl,
   FormGroup,
   UntypedFormBuilder,
@@ -17,7 +17,11 @@ import { combineLatest } from 'rxjs';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  public form!: FormGroup;
+  public wordsQuantity: UntypedFormControl = new FormControl(
+    7,
+    [Validators.required, Validators.min(2), Validators.max(20)]
+  );
+  public form!: FormArray;
   public firstAttemptWordControl: UntypedFormControl = new FormControl('');
   public firstAttemptMatchesControl: UntypedFormControl = new FormControl(null);
   public secondAttemptWordControl: UntypedFormControl = new FormControl('');
@@ -34,23 +38,7 @@ export class AppComponent {
   public constructor(
     private _fb: UntypedFormBuilder,
   ) {
-    this.form = this._fb.group({
-      first: ['', Validators.required],
-      second: ['', Validators.required],
-      third: ['', Validators.required],
-      forth: ['', Validators.required],
-      fifth: ['', Validators.required],
-      sixth: ['', Validators.required],
-      seventh: ['', Validators.required],
-    });
-
-    this.form.controls['first'].addValidators(this._wordLengthValidator('first'));
-    this.form.controls['second'].addValidators(this._wordLengthValidator('second'));
-    this.form.controls['third'].addValidators(this._wordLengthValidator('third'));
-    this.form.controls['forth'].addValidators(this._wordLengthValidator('forth'));
-    this.form.controls['fifth'].addValidators(this._wordLengthValidator('fifth'));
-    this.form.controls['sixth'].addValidators(this._wordLengthValidator('sixth'));
-    this.form.controls['seventh'].addValidators(this._wordLengthValidator('seventh'));
+    this.form = this._getForm(this.wordsQuantity.value)
 
     this.form.valueChanges
       .subscribe(() => {
@@ -63,15 +51,8 @@ export class AppComponent {
       this.firstAttemptWordControl.valueChanges,
       this.firstAttemptMatchesControl.valueChanges,
     ).subscribe(([baseWord, matches]: [string, number]) => {
-      if (this.initialMatchesMap[baseWord] && matches !== null) {
-        let words: string[] = Object.values(this.form.value);
-        this.firstAttemptGuesses = words
-          .filter((word: string) => baseWord !== word)
-          .filter((word: string) => {
-            return word.split('')
-              .filter((letter: string, index: number) => letter === baseWord[index])
-              .length === matches;
-          });
+      if (this._shouldCountGuesses(baseWord, matches)) {
+        this.firstAttemptGuesses = this._getAttemptGuess((Object.values(this.form.value) as string[]), baseWord, matches);
 
         return;
       }
@@ -83,14 +64,8 @@ export class AppComponent {
       this.secondAttemptWordControl.valueChanges,
       this.secondAttemptMatchesControl.valueChanges,
     ).subscribe(([baseWord, matches]: [string, number]) => {
-      if (this.initialMatchesMap[baseWord] && matches !== null) {
-        this.secondAttemptGuesses = this.firstAttemptGuesses
-          .filter((word: string) => baseWord !== word)
-          .filter((word: string) => {
-            return word.split('')
-              .filter((letter: string, index: number) => letter === baseWord[index])
-              .length === matches;
-          });
+      if (this._shouldCountGuesses(baseWord, matches)) {
+        this.secondAttemptGuesses = this._getAttemptGuess(this.firstAttemptGuesses, baseWord, matches);
 
         return;
       }
@@ -102,14 +77,8 @@ export class AppComponent {
       this.thirdAttemptWordControl.valueChanges,
       this.thirdAttemptMatchesControl.valueChanges,
     ).subscribe(([baseWord, matches]: [string, number]) => {
-      if (this.initialMatchesMap[baseWord] && matches !== null) {
-        this.thirdAttemptGuesses = this.secondAttemptGuesses
-          .filter((word: string) => baseWord !== word)
-          .filter((word: string) => {
-            return word.split('')
-              .filter((letter: string, index: number) => letter === baseWord[index])
-              .length === matches;
-          });
+      if (this._shouldCountGuesses(baseWord, matches)) {
+        this.thirdAttemptGuesses = this._getAttemptGuess(this.secondAttemptGuesses, baseWord, matches);
 
         return;
       }
@@ -126,9 +95,11 @@ export class AppComponent {
     words.forEach((baseWord: string) => {
       if (baseWord) {
         this.initialMatchesMap[baseWord] = words.reduce((matches: number, word: string) => {
-          const currentMatches: number = !word ? 0 : word.split('').reduce((matchesCount: number, char: string, index: number) => {
-              return baseWord[index] === char ? matchesCount + 1 : matchesCount
-            }, 0)
+          const currentMatches: number = !word
+            ? 0
+            : word.split('').reduce((matchesCount: number, char: string, index: number) => {
+                return baseWord[index] === char ? matchesCount + 1 : matchesCount
+              }, 0)
           ;
 
           return word === baseWord ? matches : matches + currentMatches;
@@ -155,12 +126,14 @@ export class AppComponent {
     this.thirdAttemptWordControl.setValue(word);
   }
 
+  public regenerateForm(wordsQuantity: number, formValue: { [key: string]: string} ): void {
+    this.form = this._getForm(wordsQuantity, formValue);
+    this._resetAttemptsForms();
+  }
+
   public clear(): void {
     this.form.reset();
     this._resetAttemptsForms();
-    this.initialGuesses = [];
-    this.maxMatches = 0;
-    this.initialMatchesMap = {};
   }
 
   private _resetAttemptsForms(): void {
@@ -181,7 +154,7 @@ export class AppComponent {
 
   private _wordLengthValidator(controlName: string): ValidatorFn {
     return (currentControl: AbstractControl): ValidationErrors | null => {
-      if (!currentControl) {
+      if (!currentControl || !this.form) {
         return null;
       }
 
@@ -191,5 +164,27 @@ export class AppComponent {
       return Object.values(formValue)
         .some((word: string) => currentControl.value && word && word.length !== currentControl.value.length) ? { length: true } : null;
     };
+  }
+
+  private _getForm(controlsLength: number, initialValue?: { [key: string]: string }): FormArray {
+    return this._fb.array(
+      [...Array(controlsLength).keys()].map(
+        (index: number) => new FormControl((initialValue && initialValue[`${index}`]) || '', [Validators.required, this._wordLengthValidator(`${index}`)])
+      )
+    );
+  }
+
+  private _getAttemptGuess(previousGuesses: string[], baseWord: string, matches: number): string[] {
+    return previousGuesses
+      .filter((word: string) => baseWord !== word)
+      .filter((word: string) => {
+        return word.split('')
+          .filter((letter: string, index: number) => letter === baseWord[index])
+          .length === matches;
+      });
+  }
+
+  private _shouldCountGuesses(baseWord: string, matches: number): boolean {
+    return !!this.initialMatchesMap[baseWord] && matches !== null
   }
 }

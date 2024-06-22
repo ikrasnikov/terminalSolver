@@ -50,6 +50,22 @@
               ],
               "outputHashing": "all"
             },
+            "gh-pages": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1mb",
+                  "maximumError": "4mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "50kb",
+                  "maximumError": "100kb"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/terminalSolver/"
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
