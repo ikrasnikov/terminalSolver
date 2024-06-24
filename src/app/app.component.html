@@ -21,14 +21,14 @@
 
                 <div
                   *ngIf="(wordsQuantity.hasError('min') || wordsQuantity.hasError('max')) && wordsQuantity.touched"
-                  class="layout-list__item error"
+                  class="layout-list__item validation-error"
                 >
                   Should be between 3 and 20
                 </div>
 
                 <div
                   *ngIf="wordsQuantity.hasError('required') && wordsQuantity.touched"
-                  class="layout-list__item error"
+                  class="layout-list__item validation-error"
                 >
                   Can't be blank
                 </div>
@@ -77,14 +77,14 @@
 
                     <div
                       *ngIf="wordControl.hasError('length') && wordControl.touched"
-                      class="layout-list__item error"
+                      class="layout-list__item validation-error"
                     >
                       Word length is not equal to others
                     </div>
 
                     <div
                       *ngIf="wordControl.hasError('required') && wordControl.touched"
-                      class="layout-list__item error"
+                      class="layout-list__item validation-error"
                     >
                       Can't be blank
                     </div>
@@ -185,35 +185,39 @@
                 [formControl]="firstAttemptMatchesControl"
                 type="number"
                 placeholder="Type the number of matches"
+                #firstMatchesControl
               >
             </div>
           </div>
         </div>
 
-        <ng-container *ngIf="firstAttemptWordControl.value && firstAttemptMatchesControl.value !== null">
+        <div
+          *ngIf="firstAttemptWordControl.value && firstAttemptMatchesControl.value !== null"
+          class="layout-list__item"
+          #firstAttemptGuessesContainer
+        >
           <div
             *ngIf="firstAttemptGuesses.length else suggestionError"
-            class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Next suggestions are:
-              </div>
+            class="layout-inline"
+          >
+            <div class="layout-inline__item">
+              Next suggestions are:
+            </div>
 
-              <div
-                *ngFor="let firstAttemptGuess of firstAttemptGuesses"
-                class="layout-inline__item guess"
-                (click)="selectSecondGuess(firstAttemptGuess)"
-              >
-                {{ firstAttemptGuess }}
-              </div>
+            <div
+              *ngFor="let firstAttemptGuess of firstAttemptGuesses"
+              class="layout-inline__item guess"
+              (click)="selectSecondGuess(firstAttemptGuess)"
+            >
+              {{ firstAttemptGuess }}
             </div>
           </div>
-        </ng-container>
+        </div>
       </div>
     </div>
 
     <div *ngIf="firstAttemptMatchesControl.value !== null && initialMatchesMap[firstAttemptWordControl.value] && firstAttemptGuesses.length"
-         class="layout-inline__item">
+         class="layout-list__item">
       <div class="layout-list">
         <div class="layout-list__item">
           <input
@@ -228,34 +232,37 @@
             [formControl]="secondAttemptMatchesControl"
             type="number"
             placeholder="Type the number of matches"
+            #secondMatchesControl
           >
         </div>
 
-        <ng-container *ngIf="secondAttemptWordControl.value && secondAttemptMatchesControl.value !== null">
+        <div
+          *ngIf="secondAttemptWordControl.value && secondAttemptMatchesControl.value !== null"
+          class="layout-list__item"
+          #secondAttemptGuessesContainer
+        >
           <div
             *ngIf="secondAttemptGuesses.length else suggestionError"
-            class="layout-list__item"
+            class="layout-inline"
           >
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Next suggestions are:
-              </div>
+            <div class="layout-inline__item">
+              Next suggestions are:
+            </div>
 
-              <div
-                *ngFor="let secondAttemptGuess of secondAttemptGuesses"
-                class="layout-inline__item guess"
-                (click)="selectThirdGuess(secondAttemptGuess)"
-              >
-                {{ secondAttemptGuess }}
-              </div>
+            <div
+              *ngFor="let secondAttemptGuess of secondAttemptGuesses"
+              class="layout-inline__item guess"
+              (click)="selectThirdGuess(secondAttemptGuess)"
+            >
+              {{ secondAttemptGuess }}
             </div>
           </div>
-        </ng-container>
+        </div>
       </div>
     </div>
 
     <div *ngIf="secondAttemptMatchesControl.value !== null && initialMatchesMap[firstAttemptWordControl.value] && secondAttemptGuesses.length"
-         class="layout-inline__item">
+         class="layout-list__item">
       <div class="layout-list">
         <div class="layout-list__item">
           <input
@@ -270,26 +277,30 @@
             [formControl]="thirdAttemptMatchesControl"
             type="number"
             placeholder="Type the number of matches"
+            #thirdMatchesControl
           >
         </div>
 
-        <ng-container *ngIf="thirdAttemptWordControl.value && thirdAttemptMatchesControl.value !== null">
+        <div
+          *ngIf="thirdAttemptWordControl.value && thirdAttemptMatchesControl.value !== null"
+          class="layout-list__item"
+          #thirdAttemptGuessesContainer
+        >
           <div
             *ngIf="thirdAttemptGuesses.length else suggestionError"
-            class="layout-list__item">
-            <div class="layout-inline">
-              <div class="layout-inline__item">
-                Next suggestions are:
-              </div>
+            class="layout-inline"
+          >
+            <div class="layout-inline__item">
+              Next suggestions are:
+            </div>
 
-              <div
-                *ngFor="let thirdAttemptGuess of thirdAttemptGuesses"
-                class="layout-inline__item guess">
-                {{ thirdAttemptGuess }}
-              </div>
+            <div
+              *ngFor="let thirdAttemptGuess of thirdAttemptGuesses"
+              class="layout-inline__item guess">
+              {{ thirdAttemptGuess }}
             </div>
           </div>
-        </ng-container>
+        </div>
       </div>
     </div>
   </div>

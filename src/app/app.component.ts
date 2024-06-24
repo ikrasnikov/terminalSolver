@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   AbstractControl, AbstractControlOptions, FormArray,
   FormControl,
@@ -17,8 +17,17 @@ import { combineLatest } from 'rxjs';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  private readonly _DEFAULT_WORD_QUANTITY: number = 7;
+
+  @ViewChild('firstMatchesControl') public firstMatchesControlElement!: ElementRef;
+  @ViewChild('secondMatchesControl') public secondMatchesControlElement!: ElementRef;
+  @ViewChild('thirdMatchesControl') public thirdMatchesControlElement!: ElementRef;
+  @ViewChild('firstAttemptGuessesContainer') public firstAttemptGuessesContainer!: ElementRef;
+  @ViewChild('secondAttemptGuessesContainer') public secondAttemptGuessesContainer!: ElementRef;
+  @ViewChild('thirdAttemptGuessesContainer') public thirdAttemptGuessesContainer!: ElementRef;
+
   public wordsQuantity: UntypedFormControl = new FormControl(
-    7,
+    this._DEFAULT_WORD_QUANTITY,
     [Validators.required, Validators.min(2), Validators.max(20)]
   );
   public form!: FormArray;
@@ -53,6 +62,9 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.firstAttemptGuesses = this._getAttemptGuess((Object.values(this.form.value) as string[]), baseWord, matches);
+        setTimeout(() => {
+          this._scrollToElement(this.firstAttemptGuessesContainer);
+        })
 
         return;
       }
@@ -66,6 +78,9 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.secondAttemptGuesses = this._getAttemptGuess(this.firstAttemptGuesses, baseWord, matches);
+        setTimeout(() => {
+          this._scrollToElement(this.firstAttemptGuessesContainer);
+        })
 
         return;
       }
@@ -79,6 +94,9 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.thirdAttemptGuesses = this._getAttemptGuess(this.secondAttemptGuesses, baseWord, matches);
+        setTimeout(() => {
+          this._scrollToElement(this.firstAttemptGuessesContainer);
+        })
 
         return;
       }
@@ -115,15 +133,15 @@ export class AppComponent {
   }
 
   public selectInitialGuess(word: string): void {
-    this.firstAttemptWordControl.setValue(word);
+    this._selectGuess(word, this.firstAttemptWordControl, this.firstMatchesControlElement);
   }
 
   public selectSecondGuess(word: string): void {
-    this.secondAttemptWordControl.setValue(word);
+    this._selectGuess(word, this.secondAttemptWordControl, this.secondMatchesControlElement);
   }
 
   public selectThirdGuess(word: string): void {
-    this.thirdAttemptWordControl.setValue(word);
+    this._selectGuess(word, this.thirdAttemptWordControl, this.thirdMatchesControlElement);
   }
 
   public regenerateForm(wordsQuantity: number, formValue: { [key: string]: string} ): void {
@@ -185,6 +203,15 @@ export class AppComponent {
   }
 
   private _shouldCountGuesses(baseWord: string, matches: number): boolean {
-    return !!this.initialMatchesMap[baseWord] && matches !== null
+    return this.initialMatchesMap[baseWord] !== undefined && matches !== null;
+  }
+
+  private _selectGuess(word: string, control: UntypedFormControl, controlElementRef: ElementRef): void {
+    control.setValue(word);
+    this._scrollToElement(controlElementRef);
+  }
+
+  private _scrollToElement(elementRef: ElementRef): void {
+    elementRef.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
 }

@@ -268,8 +268,11 @@ main {
   background-color: #fc7e7e;
 }
 
-.error {
+.validation-error, .error {
   color: red;
+}
+
+.validation-error {
   font-size: 14px;
   max-width: 150px;
 }
