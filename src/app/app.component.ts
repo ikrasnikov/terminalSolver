@@ -62,6 +62,7 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.firstAttemptGuesses = this._getAttemptGuess((Object.values(this.form.value) as string[]), baseWord, matches);
+
         setTimeout(() => {
           this._scrollToElement(this.firstAttemptGuessesContainer);
         })
@@ -78,6 +79,7 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.secondAttemptGuesses = this._getAttemptGuess(this.firstAttemptGuesses, baseWord, matches);
+
         setTimeout(() => {
           this._scrollToElement(this.firstAttemptGuessesContainer);
         })
@@ -94,6 +96,7 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.thirdAttemptGuesses = this._getAttemptGuess(this.secondAttemptGuesses, baseWord, matches);
+
         setTimeout(() => {
           this._scrollToElement(this.firstAttemptGuessesContainer);
         })
