@@ -17,14 +17,10 @@ import { combineLatest } from 'rxjs';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  private readonly _DEFAULT_WORD_QUANTITY: number = 7;
+  private readonly _DEFAULT_WORD_QUANTITY: number = 8;
 
-  @ViewChild('firstMatchesControl') public firstMatchesControlElement!: ElementRef;
-  @ViewChild('secondMatchesControl') public secondMatchesControlElement!: ElementRef;
-  @ViewChild('thirdMatchesControl') public thirdMatchesControlElement!: ElementRef;
-  @ViewChild('firstAttemptGuessesContainer') public firstAttemptGuessesContainer!: ElementRef;
-  @ViewChild('secondAttemptGuessesContainer') public secondAttemptGuessesContainer!: ElementRef;
-  @ViewChild('thirdAttemptGuessesContainer') public thirdAttemptGuessesContainer!: ElementRef;
+  @ViewChild('backButton') public backButton!: ElementRef;
+  @ViewChild('clearButton') public clearButton!: ElementRef;
 
   public wordsQuantity: UntypedFormControl = new FormControl(
     this._DEFAULT_WORD_QUANTITY,
@@ -62,10 +58,7 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.firstAttemptGuesses = this._getAttemptGuess((Object.values(this.form.value) as string[]), baseWord, matches);
-
-        setTimeout(() => {
-          this._scrollToElement(this.firstAttemptGuessesContainer);
-        })
+        this._scrollToElement(this.backButton);
 
         return;
       }
@@ -79,10 +72,7 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.secondAttemptGuesses = this._getAttemptGuess(this.firstAttemptGuesses, baseWord, matches);
-
-        setTimeout(() => {
-          this._scrollToElement(this.firstAttemptGuessesContainer);
-        })
+        this._scrollToElement(this.backButton);
 
         return;
       }
@@ -96,10 +86,7 @@ export class AppComponent {
     ).subscribe(([baseWord, matches]: [string, number]) => {
       if (this._shouldCountGuesses(baseWord, matches)) {
         this.thirdAttemptGuesses = this._getAttemptGuess(this.secondAttemptGuesses, baseWord, matches);
-
-        setTimeout(() => {
-          this._scrollToElement(this.firstAttemptGuessesContainer);
-        })
+        this._scrollToElement(this.backButton);
 
         return;
       }
@@ -136,15 +123,15 @@ export class AppComponent {
   }
 
   public selectInitialGuess(word: string): void {
-    this._selectGuess(word, this.firstAttemptWordControl, this.firstMatchesControlElement);
+    this._selectGuess(word, this.firstAttemptWordControl, this.backButton);
   }
 
   public selectSecondGuess(word: string): void {
-    this._selectGuess(word, this.secondAttemptWordControl, this.secondMatchesControlElement);
+    this._selectGuess(word, this.secondAttemptWordControl, this.backButton);
   }
 
   public selectThirdGuess(word: string): void {
-    this._selectGuess(word, this.thirdAttemptWordControl, this.thirdMatchesControlElement);
+    this._selectGuess(word, this.thirdAttemptWordControl, this.backButton);
   }
 
   public regenerateForm(wordsQuantity: number, formValue: { [key: string]: string} ): void {
@@ -155,6 +142,10 @@ export class AppComponent {
   public clear(): void {
     this.form.reset();
     this._resetAttemptsForms();
+  }
+
+  public back(): void {
+    this._scrollToElement(this.clearButton);
   }
 
   private _resetAttemptsForms(): void {

@@ -46,7 +46,12 @@
         </div>
 
         <div class="layout-inline__item">
-          <button (click)="clear()">Clear</button>
+          <button
+            (click)="clear()"
+            #clearButton
+          >
+            Clear
+          </button>
         </div>
       </div>
     </div>
@@ -185,7 +190,6 @@
                 [formControl]="firstAttemptMatchesControl"
                 type="number"
                 placeholder="Type the number of matches"
-                #firstMatchesControl
               >
             </div>
           </div>
@@ -194,7 +198,6 @@
         <div
           *ngIf="firstAttemptWordControl.value && firstAttemptMatchesControl.value !== null"
           class="layout-list__item"
-          #firstAttemptGuessesContainer
         >
           <div
             *ngIf="firstAttemptGuesses.length else suggestionError"
@@ -232,14 +235,12 @@
             [formControl]="secondAttemptMatchesControl"
             type="number"
             placeholder="Type the number of matches"
-            #secondMatchesControl
           >
         </div>
 
         <div
           *ngIf="secondAttemptWordControl.value && secondAttemptMatchesControl.value !== null"
           class="layout-list__item"
-          #secondAttemptGuessesContainer
         >
           <div
             *ngIf="secondAttemptGuesses.length else suggestionError"
@@ -277,14 +278,12 @@
             [formControl]="thirdAttemptMatchesControl"
             type="number"
             placeholder="Type the number of matches"
-            #thirdMatchesControl
           >
         </div>
 
         <div
           *ngIf="thirdAttemptWordControl.value && thirdAttemptMatchesControl.value !== null"
           class="layout-list__item"
-          #thirdAttemptGuessesContainer
         >
           <div
             *ngIf="thirdAttemptGuesses.length else suggestionError"
@@ -302,6 +301,15 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div *ngIf="initialGuesses.length" class="layout-list__item">
+      <button
+        #backButton
+        (click)="back()"
+      >
+        Back
+      </button>
     </div>
   </div>
 </main>
